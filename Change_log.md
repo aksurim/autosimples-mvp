@@ -1,0 +1,80 @@
+# Change Log - AutoSimples
+
+## [Início do Projeto] - Data Atual
+- **Implementação de Analytics Proprietário (Fase 3)**:
+    - Criada tabela `metrics` no banco de dados para armazenar contadores de eventos.
+    - Implementada rota `/api/metrics/report` que gera um JSON completo com métricas e análise automática da Taxa de Conversão (Meta: 15%).
+    - Criada página `/admin` (protegida por senha simples) com Dashboard visual para acompanhamento em tempo real.
+    - Configurado rastreamento automático de `total_visits` ao carregar a Landing Page.
+    - Configurado rastreamento de `simulation_success` e `schedule_button_clicks` no Backend.
+- **Implementação de Coleta de Dados (Fase 3)**:
+    - Atualizado `BookingModal` para incluir um passo extra de "Quiz" após o agendamento.
+    - O Quiz coleta: Nível de Confiança (0-10) e Maior Medo (Texto Livre), conforme requisitos do Santander.
+    - Atualizado Backend (`server/index.js`) com nova rota `/api/feedback` para atualizar o lead com as respostas do quiz.
+    - Ajustada mensagem final para deixar claro que o usuário é um "Beta Tester" e que é uma "Pré-reserva", garantindo transparência ética.
+- **Polimento Visual (Fase 3.5)**:
+    - Implementado `LoginModal` para o botão "Acesso Oficina", simulando uma área restrita para parceiros.
+    - Implementado `Toast` para dar feedback visual ("Em breve") em links de redes sociais e rodapé.
+    - Ajustada navegação do `Header` para fazer scroll suave até as seções `id="servicos"` e `id="garantia"`.
+- **Correção de Dados (Fase 3.5)**:
+    - Criado script `server/updateDb.js` para inserir o serviço de "Troca de Bateria" no banco de dados, corrigindo o erro onde o frontend solicitava um ID inexistente.
+    - Adicionado comando `npm run db:update` no `package.json`.
+- **Refatoração de UX (Fase 3.5)**:
+    - Alterado fluxo principal do `Hero`: Agora o usuário escolhe primeiro o serviço (Cards com ícones) e depois digita a placa.
+    - Adicionado mock de "Câmera" no input de placa para indicar funcionalidade futura.
+    - Criado arquivo `src/data/mockData.ts` para centralizar dados de serviços e oficinas.
+    - Atualizado `SimulationResults` para focar no serviço escolhido pelo usuário.
+    - Atualizado `BookingModal` para exibir resumo financeiro claro (Peça + Mão de Obra).
+- **Correções de Ambiente (QA)**:
+    - Atualizado script `dev` no `package.json` para usar `concurrently`. Agora ele inicia Frontend e Backend simultaneamente com um único comando.
+    - Adicionado arquivo `public/vite.svg` para corrigir erro 404 de favicon.
+- **Preparação para QA (Fase 3.5)**:
+    - Atualizado `package.json` com script `dev: "vite --host"` para permitir testes via rede local (Mobile).
+    - Criada Fase 3.5 no `Check_list.md` focada em Polimento e Testes antes do Deploy.
+    - Atualizada documentação (`Blueprint.md`, `README.md`) confirmando suporte a Node.js no host.
+- **Desenvolvimento Frontend (Fase 2 - Finalização)**:
+    - Implementado componente `HowItWorks` com 3 passos visuais e ícones explicativos.
+    - Implementado componente `Footer` com links rápidos, redes sociais e copyright.
+    - Integrados todos os componentes no `App.tsx` (Header, Hero, HowItWorks, Footer).
+- **Desenvolvimento Frontend (Fase 2)**:
+    - Implementado `BookingModal` com fluxo de 4 passos: Escolha de Oficina (Mockada com geolocalização simulada), Seleção de Data/Hora, Captura de Contato e Confirmação.
+    - Atualizado `SimulationResults` para remover identificação fake de veículo e focar na validação da placa e compatibilidade de serviços.
+    - Integrado fluxo completo: Simulação -> Escolha de Serviço -> Modal de Agendamento -> Confirmação.
+    - Implementado componente `SimulationResults` para exibir o veículo identificado e a lista de serviços.
+    - Atualizado `Hero` para integrar com a API de simulação, gerenciar estados de loading e exibir os resultados dinamicamente.
+    - Criado componente `Header` responsivo com navegação e menu mobile.
+    - Criado componente `Hero` inicial com copy refinada.
+- **Desenvolvimento Backend (Fase 2)**:
+    - Criada rota `POST /api/agendar` para salvar o lead no banco de dados com detalhes da oficina e horário escolhidos.
+    - Atualizada rota `POST /api/simular` para remover retorno de veículo fake e focar na validação.
+    - Criada rota `POST /api/simular` no Express.
+    - Implementada lógica de "Mock Inteligente" para identificação de veículos baseada na placa.
+    - Integrada consulta real ao banco de dados (`SELECT * FROM servicos`) para retornar o catálogo.
+- **Configuração do Banco de Dados (Fase 1)**:
+    - Criado script `server/setupDb.js` para automação da criação de tabelas (`leads`, `servicos`) e seed inicial.
+    - Adicionado comando `npm run db:setup` no `package.json`.
+- **Configuração do Backend (Fase 1)**:
+    - Criado diretório `server` para a API.
+    - Implementado `server/db.js` para conexão com MySQL usando pool de conexões.
+    - Implementado `server/index.js` com servidor Express básico e rota de health check (`/api/health`).
+    - Criado arquivo `.env` (template) e configurado `.gitignore` para segurança.
+- **Configuração Inicial do Projeto (Fase 1)**:
+    - Inicializado projeto React com Vite e TypeScript.
+    - Configurado Tailwind CSS para estilização.
+    - Criados arquivos de configuração: `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`.
+    - Criada estrutura básica de diretórios `src` com `App.tsx` e `main.tsx`.
+    - Atualizado `package.json` com dependências de produção (React, Express, MySQL2) e desenvolvimento.
+- **Definição de Stack Tecnológica (Atualização)**:
+    - **Frontend**: React + Vite + Tailwind CSS.
+    - **Backend**: Node.js (Express) para API.
+    - **Banco de Dados**: MySQL (Hospedado no SuperDominios).
+    - **Infraestrutura**: Deploy no SuperDominios.
+- **Atualização de Documentação**:
+    - `Blueprint.md`: Adicionada seção 5 com especificações técnicas detalhadas.
+    - `Check_list.md`: Ajustado para incluir configuração de BD e deploy específico.
+- **Criação da Estrutura de Documentação**:
+    - Criado `Check_list.md` com as fases do projeto.
+    - Criado `Change_log.md` para registro de alterações.
+    - Criado `README.md` inicial.
+- **Definição de Escopo**:
+    - Baseado no `Blueprint.md` fornecido, o foco é uma Landing Page de Validação com Simulador.
