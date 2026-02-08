@@ -25,10 +25,10 @@
 - [x] Ajustar Navegação Interna (Scroll Suave)
 - [x] Implementar Quiz Estruturado (Múltipla Escolha) para Padronização de Dados
 - [x] Adicionar Exportação CSV Otimizada (Com Resumo Executivo) no Dashboard Admin
-- [ ] Testar Responsividade (Mobile/Tablet/Desktop)
-- [ ] Inserir Logo Oficial e Favicon
-- [ ] Revisão de Textos e Ortografia
-- [ ] Teste de Fluxo Completo (Simulação -> Agendamento) em ambiente local
+- [x] Testar Responsividade (Mobile/Tablet/Desktop)
+- [x] Inserir Logo Oficial e Favicon
+- [x] Revisão de Textos e Ortografia
+- [x] Teste de Fluxo Completo (Simulação -> Agendamento) em ambiente local
 
 ## Fase 4: Entrega e Deploy
 - [ ] Gerar Build de Produção (Frontend)

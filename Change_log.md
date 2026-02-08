@@ -1,6 +1,10 @@
 # Change Log - AutoSimples
 
 ## [Início do Projeto] - Data Atual
+- **Preparação para Deploy (Fase 4)**:
+    - Revertida configuração de API para modo automático (`/api` em produção, `localhost` em dev).
+    - Configurado `server/index.js` para servir os arquivos estáticos do React (`dist/`) em produção.
+    - Adicionada rota "Coringa" (`*`) no Express para suportar o React Router (SPA) sem erros de 404 ao recarregar a página.
 - **Refinamento de Analytics (Fase 3.5)**:
     - Atualizada função `downloadCSV` no Dashboard Admin para gerar um relatório estruturado com "Resumo Executivo". O CSV agora inclui seções de "Dados Brutos" e "Respostas para o Entregável", facilitando o preenchimento da planilha do Santander.
 - **Refinamento de Coleta de Dados (Fase 3.5)**:

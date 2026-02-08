@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Car, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { LoginModal } from './LoginModal';
+import { Logo } from './Logo';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,23 +17,22 @@ export function Header() {
 
   return (
     <>
-      <header className="bg-white shadow-sm fixed w-full top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Car className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">AutoSimples</span>
+            <div onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Logo />
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8 items-center">
-              <button onClick={() => scrollToSection('como-funciona')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Como Funciona</button>
-              <button onClick={() => scrollToSection('servicos')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Serviços</button>
-              <button onClick={() => scrollToSection('garantia')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Garantia</button>
+              <button onClick={() => scrollToSection('como-funciona')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide">Como Funciona</button>
+              <button onClick={() => scrollToSection('servicos')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide">Serviços</button>
+              <button onClick={() => scrollToSection('garantia')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide">Garantia</button>
               <button 
                 onClick={() => setIsLoginOpen(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium shadow-sm hover:shadow-md"
+                className="bg-brand-orange text-white px-6 py-2.5 rounded-full hover:bg-orange-600 transition-all font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 Acesso Oficina
               </button>
@@ -42,9 +42,9 @@ export function Header() {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-600 hover:text-gray-900 focus:outline-none"
+                className="text-brand-dark hover:text-brand-teal focus:outline-none"
               >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMenuOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
               </button>
             </div>
           </div>
@@ -52,17 +52,19 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <button onClick={() => scrollToSection('como-funciona')} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Como Funciona</button>
-              <button onClick={() => scrollToSection('servicos')} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Serviços</button>
-              <button onClick={() => scrollToSection('garantia')} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Garantia</button>
-              <button 
-                onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
-                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-blue-600 hover:bg-blue-50 font-bold"
-              >
-                Acesso Oficina
-              </button>
+          <div className="md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl animate-fade-in">
+            <div className="px-4 pt-4 pb-6 space-y-2">
+              <button onClick={() => scrollToSection('como-funciona')} className="block w-full text-left px-4 py-3 rounded-lg text-base font-semibold text-brand-dark hover:bg-brand-light hover:text-brand-teal">Como Funciona</button>
+              <button onClick={() => scrollToSection('servicos')} className="block w-full text-left px-4 py-3 rounded-lg text-base font-semibold text-brand-dark hover:bg-brand-light hover:text-brand-teal">Serviços</button>
+              <button onClick={() => scrollToSection('garantia')} className="block w-full text-left px-4 py-3 rounded-lg text-base font-semibold text-brand-dark hover:bg-brand-light hover:text-brand-teal">Garantia</button>
+              <div className="pt-4">
+                <button 
+                  onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
+                  className="w-full text-center block px-4 py-3 rounded-full text-base font-bold bg-brand-orange text-white shadow-md"
+                >
+                  Acesso Oficina
+                </button>
+              </div>
             </div>
           </div>
         )}

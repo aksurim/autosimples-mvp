@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Car, Instagram, Facebook, Mail } from 'lucide-react';
+import { Instagram, Facebook, Mail } from 'lucide-react';
 import { Toast } from './Toast';
+import { Logo } from './Logo';
 
 export function Footer() {
   const [showToast, setShowToast] = useState(false);
@@ -18,9 +19,9 @@ export function Footer() {
             
             {/* Brand */}
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center mb-4">
-                <Car className="h-8 w-8 text-blue-500" />
-                <span className="ml-2 text-2xl font-bold">AutoSimples</span>
+              <div className="mb-6 filter brightness-0 invert opacity-90"> 
+                {/* Logo em versão branca (invertida) para o fundo escuro */}
+                <Logo />
               </div>
               <p className="text-gray-400 max-w-sm">
                 A primeira plataforma que conecta a placa do seu carro à peça certa e à oficina pronta. Tecnologia e confiança para você dirigir tranquilo.
@@ -31,10 +32,10 @@ export function Footer() {
             <div>
               <h4 className="text-lg font-bold mb-4 text-gray-200">Links Rápidos</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#como-funciona" className="hover:text-blue-400 transition-colors">Como Funciona</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-blue-400 transition-colors">Oficinas Parceiras</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-blue-400 transition-colors">Para Mecânicos</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-blue-400 transition-colors">Sobre Nós</a></li>
+                <li><a href="#como-funciona" className="hover:text-brand-teal transition-colors">Como Funciona</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors">Oficinas Parceiras</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors">Para Mecânicos</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors">Sobre Nós</a></li>
               </ul>
             </div>
 
@@ -47,8 +48,8 @@ export function Footer() {
                   contato@autosimples.com.br
                 </li>
                 <li className="flex gap-4 mt-4">
-                  <a href="#" onClick={handleLinkClick} className="hover:text-blue-400 transition-colors"><Instagram className="w-6 h-6" /></a>
-                  <a href="#" onClick={handleLinkClick} className="hover:text-blue-400 transition-colors"><Facebook className="w-6 h-6" /></a>
+                  <a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors"><Instagram className="w-6 h-6" /></a>
+                  <a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors"><Facebook className="w-6 h-6" /></a>
                 </li>
               </ul>
             </div>

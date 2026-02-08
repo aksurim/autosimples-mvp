@@ -245,7 +245,7 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
 
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-3">
-                    Qual seu maior medo ao deixar o carro na oficina hoje?
+                    Qual seu maior medo ao deixar o carro na oficina de forma convencional?
                   </label>
                   <div className="space-y-2">
                     {MEDO_OPTIONS.map((opcao, index) => (
