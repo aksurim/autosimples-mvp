@@ -3,7 +3,6 @@ import { Search, ShieldCheck, Clock, Loader2, Camera, Droplets, Disc, Wind, Batt
 import { SimulationResults } from './SimulationResults';
 import { BookingModal } from './BookingModal';
 import { SERVICOS_INICIAIS } from '../data/mockData';
-import { API_URL } from '../config/api';
 
 export function Hero() {
   const [step, setStep] = useState(1); // 1: Escolha Serviço, 2: Digita Placa, 3: Resultados
@@ -31,7 +30,7 @@ export function Hero() {
   };
 
   const handlePlacaFocus = () => {
-    fetch(`${API_URL}/metrics/increment`, {
+    fetch('http://localhost:3001/api/metrics/increment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ metric: 'plate_input_clicks' })
@@ -46,7 +45,7 @@ export function Hero() {
     setResultado(null);
 
     try {
-      const response = await fetch(`${API_URL}/simular`, {
+      const response = await fetch('http://localhost:3001/api/simular', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ placa })
@@ -88,7 +87,6 @@ export function Hero() {
               ⚡ TUDO EM 3 CLICKS
             </div>
             
-            {/* Título Ajustado (Gramática Correta) */}
             <h1 className="text-3xl md:text-4xl font-extrabold text-brand-dark tracking-tight mb-6 leading-[1.3]">
               A <span className="text-brand-teal">peça</span> certa.<br/>
               <span className="text-brand-teal">Agendamento</span> garantido.
@@ -115,8 +113,19 @@ export function Hero() {
             
             {/* Passo 1: Escolha do Serviço */}
             {step === 1 && (
-              <div className="bg-white p-8 rounded-3xl shadow-2xl shadow-brand-teal/10 border border-gray-100 animate-fade-in">
-                <h3 className="text-2xl font-bold text-brand-dark mb-8 text-center">O que seu carro precisa hoje?</h3>
+              <div className="bg-white p-8 rounded-3xl shadow-2xl shadow-brand-teal/10 border border-gray-100 animate-fade-in relative">
+                
+                {/* Seta Indicativa (SVG) */}
+                <div className="absolute -top-12 -left-12 hidden md:block transform rotate-12">
+                  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 10 C 40 10, 60 40, 80 80" stroke="#DAF043" strokeWidth="4" strokeLinecap="round" strokeDasharray="10 10"/>
+                    <path d="M80 80 L 60 75 M 80 80 L 75 60" stroke="#DAF043" strokeWidth="4" strokeLinecap="round"/>
+                  </svg>
+                </div>
+
+                <h3 className="text-2xl font-bold text-brand-dark mb-2 text-center">O que seu carro precisa hoje?</h3>
+                <p className="text-center text-gray-500 mb-8 text-sm">Selecione o serviço desejado abaixo 👇</p>
+
                 <div className="grid grid-cols-2 gap-4">
                   {SERVICOS_INICIAIS.map((servico) => (
                     <button

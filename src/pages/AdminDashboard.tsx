@@ -29,7 +29,7 @@ export function AdminDashboard() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'admin123') { // Senha simples para MVP
+    if (password === '231010') { // Senha do MVP
       setIsAuthenticated(true);
     } else {
       alert('Senha incorreta');

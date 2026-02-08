@@ -13,23 +13,22 @@ export function Footer() {
 
   return (
     <>
-      <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
+      <footer className="bg-gray-900 text-white py-12 border-t border-gray-800 pb-24 md:pb-12"> {/* Padding extra no mobile por causa do menu inferior */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8 text-center md:text-left">
             
             {/* Brand */}
-            <div className="col-span-1 md:col-span-2">
-              <div className="mb-6 filter brightness-0 invert opacity-90"> 
-                {/* Logo em versão branca (invertida) para o fundo escuro */}
+            <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
+              <div className="mb-6 filter brightness-0 invert opacity-90 scale-110"> 
                 <Logo />
               </div>
-              <p className="text-gray-400 max-w-sm">
+              <p className="text-gray-400 max-w-sm mx-auto md:mx-0">
                 A primeira plataforma que conecta a placa do seu carro à peça certa e à oficina pronta. Tecnologia e confiança para você dirigir tranquilo.
               </p>
             </div>
 
             {/* Links Rápidos */}
-            <div>
+            <div className="flex flex-col items-center md:items-start">
               <h4 className="text-lg font-bold mb-4 text-gray-200">Links Rápidos</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#como-funciona" className="hover:text-brand-teal transition-colors">Como Funciona</a></li>
@@ -40,14 +39,14 @@ export function Footer() {
             </div>
 
             {/* Contato */}
-            <div>
+            <div className="flex flex-col items-center md:items-start">
               <h4 className="text-lg font-bold mb-4 text-gray-200">Contato</h4>
               <ul className="space-y-2 text-gray-400">
-                <li className="flex items-center gap-2">
+                <li className="flex items-center gap-2 justify-center md:justify-start">
                   <Mail className="w-4 h-4" />
                   contato@autosimples.com.br
                 </li>
-                <li className="flex gap-4 mt-4">
+                <li className="flex gap-4 mt-4 justify-center md:justify-start">
                   <a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors"><Instagram className="w-6 h-6" /></a>
                   <a href="#" onClick={handleLinkClick} className="hover:text-brand-teal transition-colors"><Facebook className="w-6 h-6" /></a>
                 </li>
@@ -55,9 +54,9 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 gap-4">
             <p>&copy; 2023 AutoSimples Tecnologia. Todos os direitos reservados.</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
+            <div className="flex gap-6">
               <a href="#" onClick={handleLinkClick} className="hover:text-gray-300">Termos de Uso</a>
               <a href="#" onClick={handleLinkClick} className="hover:text-gray-300">Privacidade</a>
             </div>
