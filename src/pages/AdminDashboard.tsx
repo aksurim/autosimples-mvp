@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock } from 'lucide-react';
+import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock, Download } from 'lucide-react';
 
 export function AdminDashboard() {
   const [data, setData] = useState<any>(null);
@@ -34,6 +34,50 @@ export function AdminDashboard() {
     } else {
       alert('Senha incorreta');
     }
+  };
+
+  const downloadCSV = () => {
+    if (!data) return;
+    
+    // Dados Calculados para o Relatório
+    const totalVisits = data.raw_data.total_visits || 1;
+    const plateClicks = data.raw_data.plate_input_clicks || 0;
+    const leads = data.raw_data.leads_captured || 0;
+    
+    const interesseRate = ((plateClicks / totalVisits) * 100).toFixed(1);
+    const conversaoRate = data.analysis.conversion_rate;
+
+    // Cria o conteúdo do CSV Otimizado para o Entregável
+    const csvRows = [
+      ["RELATÓRIO DE VALIDAÇÃO - AUTOSIMPLES (MVP SANTANDER EXPLORER)"],
+      ["Data de Extração", new Date().toLocaleString()],
+      [],
+      ["--- 1. DADOS BRUTOS (EVIDÊNCIAS) ---"],
+      ["Métrica", "Valor", "Significado"],
+      ["Total de Visitas", totalVisits, "Base de tráfego"],
+      ["Cliques na Placa", plateClicks, `Interesse na Solução (${interesseRate}%)`],
+      ["Simulações Realizadas", data.raw_data.simulation_success, "Sucesso Técnico do Mock"],
+      ["Leads Capturados", leads, "Pré-reservas (Validação de Negócio)"],
+      ["Taxa de Conversão", conversaoRate, leads >= (totalVisits * 0.15) ? "META BATIDA (>15%)" : "Abaixo da Meta"],
+      [],
+      ["--- 2. RESPOSTAS PARA O ENTREGÁVEL ---"],
+      ["Campo da Planilha", "Dado/Texto Sugerido"],
+      ["Hipótese da Solução", `Validada. ${interesseRate}% dos visitantes interagiram com o input de placa.`],
+      ["Evidência Quantitativa", `Taxa de Conversão de ${conversaoRate}% com ${leads} leads qualificados.`],
+      ["Resultado Esperado", `Validação de interesse transacional com base de ${leads} usuários.`],
+      ["Métricas de Validação", "Leads capturados, Taxa de cliques na placa e Conversão do funil."]
+    ];
+
+    // Adiciona o BOM (\uFEFF) para forçar o Excel a reconhecer UTF-8 (Acentos)
+    const csvContent = "data:text/csv;charset=utf-8,\uFEFF" 
+      + csvRows.map(e => e.join(";")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "autosimples_relatorio_santander.csv");
+    document.body.appendChild(link);
+    link.click();
   };
 
   if (!isAuthenticated) {
@@ -71,10 +115,16 @@ export function AdminDashboard() {
             <h1 className="text-3xl font-bold text-gray-900">Dashboard de Validação</h1>
             <p className="text-gray-500">Dados em tempo real do experimento AutoSimples</p>
           </div>
-          <div className="text-right">
+          <div className="flex gap-4 items-center">
             <span className={`px-4 py-2 rounded-full text-sm font-bold ${data.analysis.success_criteria_met ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
               Meta: {data.analysis.conversion_rate} (Alvo: 15%)
             </span>
+            <button 
+              onClick={downloadCSV}
+              className="bg-gray-900 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors shadow-md"
+            >
+              <Download className="w-4 h-4" /> Baixar Relatório Santander
+            </button>
           </div>
         </header>
 

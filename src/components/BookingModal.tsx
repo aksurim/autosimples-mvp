@@ -9,6 +9,14 @@ interface BookingModalProps {
   placa: string;
 }
 
+const MEDO_OPTIONS = [
+  "Pagar por serviço desnecessário por não entender de mecânica",
+  "Jogo de empurra na garantia (Mecânico x Loja)",
+  "Carro parado por peça errada/incompatível",
+  "Falta de previsão de horário e atrasos",
+  "Orçamento abusivo por falta de transparência"
+];
+
 export function BookingModal({ isOpen, onClose, servico, oficina, placa }: BookingModalProps) {
   const [step, setStep] = useState(1); // 1: Data/Hora, 2: Contato, 3: Quiz, 4: Sucesso
   const [selectedDate, setSelectedDate] = useState('');
@@ -63,6 +71,11 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
   };
 
   const handleSubmitQuiz = async () => {
+    if (!quizMedo) {
+      alert('Por favor, selecione uma opção sobre seu maior receio.');
+      return;
+    }
+
     setLoading(true);
     try {
       await fetch('http://localhost:3001/api/feedback', {
@@ -71,7 +84,7 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
         body: JSON.stringify({
           leadId,
           confianca: quizConfianca,
-          medo: quizMedo || 'Não informou'
+          medo: quizMedo
         })
       });
       setStep(4); // Vai para Sucesso
@@ -231,16 +244,31 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-3">
                     Qual seu maior medo ao deixar o carro na oficina hoje?
                   </label>
-                  <textarea
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 text-sm"
-                    rows={3}
-                    placeholder="Ex: Peças falsas, preço mudar na hora, demora..."
-                    value={quizMedo}
-                    onChange={(e) => setQuizMedo(e.target.value)}
-                  />
+                  <div className="space-y-2">
+                    {MEDO_OPTIONS.map((opcao, index) => (
+                      <label 
+                        key={index} 
+                        className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                          quizMedo === opcao 
+                            ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' 
+                            : 'border-gray-200 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="medo"
+                          value={opcao}
+                          checked={quizMedo === opcao}
+                          onChange={(e) => setQuizMedo(e.target.value)}
+                          className="mt-1 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700 leading-tight">{opcao}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
                 <button 

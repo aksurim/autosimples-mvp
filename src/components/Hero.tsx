@@ -29,6 +29,15 @@ export function Hero() {
     setStep(2);
   };
 
+  const handlePlacaFocus = () => {
+    // Registra clique no input de placa para métricas
+    fetch('http://localhost:3001/api/metrics/increment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metric: 'plate_input_clicks' })
+    }).catch(console.error);
+  };
+
   const handleSimulacao = async (e: React.FormEvent) => {
     e.preventDefault();
     if (placa.length < 7) return;
@@ -139,6 +148,7 @@ export function Hero() {
                       type="text"
                       value={placa}
                       onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+                      onFocus={handlePlacaFocus}
                       placeholder="ABC1D23"
                       className="block w-full pl-12 pr-12 py-4 text-2xl font-mono border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 uppercase tracking-widest bg-gray-50"
                       maxLength={7}

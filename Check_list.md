@@ -23,6 +23,8 @@
 - [x] Refatorar Fluxo de Simulação (Serviço -> Placa -> Resultado)
 - [x] Implementar Feedback Visual para Links (Toast e Modais)
 - [x] Ajustar Navegação Interna (Scroll Suave)
+- [x] Implementar Quiz Estruturado (Múltipla Escolha) para Padronização de Dados
+- [x] Adicionar Exportação CSV Otimizada (Com Resumo Executivo) no Dashboard Admin
 - [ ] Testar Responsividade (Mobile/Tablet/Desktop)
 - [ ] Inserir Logo Oficial e Favicon
 - [ ] Revisão de Textos e Ortografia

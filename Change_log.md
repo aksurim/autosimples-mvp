@@ -1,6 +1,12 @@
 # Change Log - AutoSimples
 
 ## [Início do Projeto] - Data Atual
+- **Refinamento de Analytics (Fase 3.5)**:
+    - Atualizada função `downloadCSV` no Dashboard Admin para gerar um relatório estruturado com "Resumo Executivo". O CSV agora inclui seções de "Dados Brutos" e "Respostas para o Entregável", facilitando o preenchimento da planilha do Santander.
+- **Refinamento de Coleta de Dados (Fase 3.5)**:
+    - Substituído campo de texto livre no Quiz por opções de múltipla escolha padronizadas para a pergunta "Maior Medo". As opções validam hipóteses específicas (Vulnerabilidade Técnica, Conflito de Garantia, etc.).
+    - Adicionado botão "Exportar CSV" no Dashboard Admin para facilitar a criação de relatórios externos.
+    - Implementado rastreamento de cliques no input de placa (`onFocus`) para garantir a precisão da métrica `plate_input_clicks`.
 - **Implementação de Analytics Proprietário (Fase 3)**:
     - Criada tabela `metrics` no banco de dados para armazenar contadores de eventos.
     - Implementada rota `/api/metrics/report` que gera um JSON completo com métricas e análise automática da Taxa de Conversão (Meta: 15%).
