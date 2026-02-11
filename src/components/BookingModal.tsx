@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, Calendar, Clock, X, CheckCircle, ShieldCheck, MessageSquare } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Calendar, X, CheckCircle, ShieldCheck, MessageSquare } from 'lucide-react';
 
 interface BookingModalProps {
   isOpen: boolean;
