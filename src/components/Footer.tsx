@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Instagram, Facebook, Mail } from 'lucide-react';
 import { Toast } from './Toast';
-import { Logo } from './Logo';
 
 export function Footer() {
   const [showToast, setShowToast] = useState(false);
@@ -17,14 +16,10 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-8 text-center md:text-left">
             
-            {/* Brand */}
-            <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
-              <div className="mb-6 filter brightness-0 invert opacity-90 scale-110"> 
-                <Logo />
-              </div>
-              <p className="text-gray-400 max-w-sm mx-auto md:mx-0">
-                A primeira plataforma que conecta a placa do seu carro à peça certa e à oficina pronta. Tecnologia e confiança para você dirigir tranquilo.
-              </p>
+            {/* Brand (Vazio ou Nome Texto se preferir, mas removi a logo conforme pedido) */}
+            <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start justify-center">
+               <h3 className="text-2xl font-bold text-white tracking-tight">AutoSimples</h3>
+               <p className="text-gray-500 text-sm mt-2">Tecnologia Plate-to-Part</p>
             </div>
 
             {/* Links Rápidos */}

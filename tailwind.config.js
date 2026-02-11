@@ -11,11 +11,11 @@ export default {
       },
       colors: {
         brand: {
-          teal: '#06777F',    // Cor Principal (Identidade)
-          orange: '#FB4629',  // Ação / Urgência (Botões)
-          lime: '#DAF043',    // Destaques / Energia
-          dark: '#282828',    // Textos / Fundo Escuro
-          light: '#F5F7FA',   // Fundo Claro (Suave)
+          teal: '#0155CF',    // Azul Royal (Principal)
+          orange: '#FF8B00',  // Laranja Vibrante (Ação)
+          lime: '#FEBF12',    // Amarelo Ouro (Destaque)
+          dark: '#282828',    // Mantido (Fundo Escuro)
+          light: '#F5F7FA',   // Mantido (Fundo Claro)
         }
       }
     },

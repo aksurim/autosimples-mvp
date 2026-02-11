@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "db:setup": "node server/setupDb.js",
     "db:update": "node server/updateDb.js",
-    "db:metrics": "node server/setupMetrics.js"
+    "db:metrics": "node server/setupMetrics.js",
+    "db:feedback": "node server/setupFeedback.js"
   },
   "dependencies": {
     "react": "^18.2.0",

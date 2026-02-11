@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Wrench, ShieldCheck, Lock } from 'lucide-react';
+import { Home, Wrench, PlayCircle, Lock } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { Logo } from './Logo';
 
@@ -18,12 +18,10 @@ export function Header() {
     }
   };
 
-  // Detecta scroll para atualizar ícone ativo
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['servicos', 'garantia'];
+      const sections = ['servicos', 'video', 'como-funciona'];
       let current = 'home';
-      
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element && window.scrollY >= (element.offsetTop - 200)) {
@@ -32,7 +30,6 @@ export function Header() {
       }
       setActiveSection(current);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -41,16 +38,24 @@ export function Header() {
     <>
       {/* Desktop Header */}
       <header className="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100 hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div onClick={() => scrollToSection('home')}>
-              <Logo />
+        <div className="w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8"> {/* Aumentei a largura para 95% */}
+          <div className="flex justify-between items-center h-28">
+            <div onClick={() => scrollToSection('home')} className="cursor-pointer hover:opacity-90 transition-opacity">
+              {/* Logo Forçada para 300px (Desktop) */}
+              <img 
+                src="/logo_autosimples.png" 
+                alt="AutoSimples" 
+                style={{ height: '300px', width: 'auto' }} 
+                className="object-contain"
+              />
             </div>
 
             <nav className="flex space-x-8 items-center">
               <button onClick={() => scrollToSection('como-funciona')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide">Como Funciona</button>
               <button onClick={() => scrollToSection('servicos')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide">Serviços</button>
-              <button onClick={() => scrollToSection('garantia')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide">Garantia</button>
+              <button onClick={() => scrollToSection('video')} className="text-brand-dark hover:text-brand-teal transition-colors font-semibold text-sm uppercase tracking-wide flex items-center gap-1">
+                <PlayCircle className="w-4 h-4" /> Na Prática
+              </button>
               <button 
                 onClick={() => setIsLoginOpen(true)}
                 className="bg-brand-orange text-white px-6 py-2.5 rounded-full hover:bg-orange-600 transition-all font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
@@ -62,14 +67,20 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Header (Apenas Logo) */}
-      <header className="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100 md:hidden flex justify-center items-center h-16">
+      {/* Mobile Header */}
+      <header className="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100 md:hidden flex justify-center items-center h-20">
         <div onClick={() => scrollToSection('home')}>
-          <Logo className="h-6 w-6" textClassName="text-lg" />
+          {/* Logo Forçada para 300px (Mobile - Conforme validado pelo usuário) */}
+          <img 
+            src="/logo_autosimples.png" 
+            alt="AutoSimples" 
+            style={{ height: '300px', width: 'auto', maxHeight: '300px' }} 
+            className="object-contain"
+          />
         </div>
       </header>
 
-      {/* Mobile Bottom Navigation (App Style) */}
+      {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 md:hidden pb-safe">
         <div className="flex justify-around items-center h-16 px-2">
           <NavButton 
@@ -85,10 +96,10 @@ export function Header() {
             onClick={() => scrollToSection('servicos')} 
           />
           <NavButton 
-            icon={<ShieldCheck className="w-6 h-6" />} 
-            label="Garantia" 
-            isActive={activeSection === 'garantia'} 
-            onClick={() => scrollToSection('garantia')} 
+            icon={<PlayCircle className="w-6 h-6" />} 
+            label="Na Prática" 
+            isActive={activeSection === 'video'} 
+            onClick={() => scrollToSection('video')}
           />
           <NavButton 
             icon={<Lock className="w-6 h-6" />} 

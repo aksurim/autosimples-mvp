@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Search, ShieldCheck, Clock, Loader2, Camera, Droplets, Disc, Wind, Battery } from 'lucide-react';
 import { SimulationResults } from './SimulationResults';
 import { BookingModal } from './BookingModal';
+import { AlertModal } from './AlertModal';
 import { SERVICOS_INICIAIS } from '../data/mockData';
+import { API_URL } from '../config/api';
 
 export function Hero() {
   const [step, setStep] = useState(1); // 1: Escolha Serviço, 2: Digita Placa, 3: Resultados
@@ -12,6 +14,13 @@ export function Hero() {
   const [resultado, setResultado] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOficina, setSelectedOficina] = useState<any>(null);
+  
+  // Estado para o Alerta
+  const [alertInfo, setAlertInfo] = useState<{isOpen: boolean, title: string, message: string}>({
+    isOpen: false,
+    title: '',
+    message: ''
+  });
 
   // Mapeamento de ícones
   const getIcon = (iconName: string) => {
@@ -30,7 +39,7 @@ export function Hero() {
   };
 
   const handlePlacaFocus = () => {
-    fetch('http://localhost:3001/api/metrics/increment', {
+    fetch(`${API_URL}/metrics/increment`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ metric: 'plate_input_clicks' })
@@ -41,11 +50,23 @@ export function Hero() {
     e.preventDefault();
     if (placa.length < 7) return;
 
+    // Validação Local de Placa Duplicada (Simulação de Memória)
+    const agendamentoExistente = localStorage.getItem(`agendamento_${placa}`);
+    if (agendamentoExistente) {
+      const dados = JSON.parse(agendamentoExistente);
+      setAlertInfo({
+        isOpen: true,
+        title: 'Agendamento Existente',
+        message: `Este veículo já possui um pré-agendamento ativo na oficina "${dados.oficina}" para o serviço "${dados.servico}".`
+      });
+      return;
+    }
+
     setLoading(true);
     setResultado(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/simular', {
+      const response = await fetch(`${API_URL}/simular`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ placa })
@@ -70,6 +91,24 @@ export function Hero() {
   const handleAgendar = (oficina: any) => {
     setSelectedOficina(oficina);
     setIsModalOpen(true);
+  };
+
+  const handleSuccess = (oficinaNome: string) => {
+    localStorage.setItem(`agendamento_${placa}`, JSON.stringify({
+      oficina: oficinaNome,
+      servico: resultado.servicoFocado.nome,
+      data: new Date().toISOString()
+    }));
+  };
+
+  const handleReset = () => {
+    setIsModalOpen(false);
+    setStep(1);
+    setPlaca('');
+    setResultado(null);
+    setSelectedServiceId(null);
+    setSelectedOficina(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -125,7 +164,7 @@ export function Hero() {
 
                 <h3 className="text-2xl font-bold text-brand-dark mb-2 text-center">O que seu carro precisa hoje?</h3>
                 <p className="text-center text-gray-500 mb-8 text-sm">Selecione o serviço desejado abaixo 👇</p>
-
+                
                 <div className="grid grid-cols-2 gap-4">
                   {SERVICOS_INICIAIS.map((servico) => (
                     <button
@@ -216,9 +255,19 @@ export function Hero() {
       <BookingModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onSuccess={handleSuccess}
+        onReset={handleReset}
         servico={resultado?.servicoFocado}
         oficina={selectedOficina}
         placa={placa}
+      />
+
+      {/* Modal de Alerta (Erro/Aviso) */}
+      <AlertModal 
+        isOpen={alertInfo.isOpen}
+        onClose={() => setAlertInfo({ ...alertInfo, isOpen: false })}
+        title={alertInfo.title}
+        message={alertInfo.message}
       />
     </section>
   );

@@ -10,15 +10,47 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Configuração para servir o Frontend junto com o Backend (Produção)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
-
-// Servir arquivos estáticos do React (Build)
 app.use(express.static(path.join(__dirname, '../dist')));
+
+// --- ROTAS DE ADMINISTRAÇÃO ---
+
+// Resetar Banco de Dados (Zerar Tudo)
+app.post('/api/admin/reset', async (req, res) => {
+  const { password } = req.body;
+
+  if (password !== '231010') {
+    return res.status(401).json({ error: 'Senha incorreta' });
+  }
+
+  try {
+    // Desativa verificação de FK para permitir truncar em qualquer ordem
+    await pool.query('SET FOREIGN_KEY_CHECKS = 0');
+    
+    await pool.query('TRUNCATE TABLE feedbacks');
+    await pool.query('TRUNCATE TABLE leads');
+    await pool.query('TRUNCATE TABLE metrics');
+    
+    // Reativa verificação de FK
+    await pool.query('SET FOREIGN_KEY_CHECKS = 1');
+    
+    // Reinicializa métricas zeradas
+    const metrics = ['total_visits', 'plate_input_clicks', 'simulation_success', 'schedule_button_clicks'];
+    for (const metric of metrics) {
+      // Usa INSERT IGNORE para evitar erro se por acaso não tiver limpado
+      await pool.query('INSERT IGNORE INTO metrics (metric_name, count) VALUES (?, 0)', [metric]);
+    }
+
+    res.json({ status: 'success', message: 'Base de dados zerada com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao resetar banco:', error);
+    res.status(500).json({ error: 'Erro ao resetar banco de dados' });
+  }
+});
 
 // --- ROTAS DE MÉTRICAS ---
 
@@ -44,6 +76,27 @@ app.get('/api/metrics/report', async (req, res) => {
     const [leadRows] = await pool.query('SELECT COUNT(*) as total FROM leads');
     const leadsCaptured = leadRows[0].total;
 
+    const [feedbackStats] = await pool.query(`
+      SELECT 
+        AVG(confianca_nota) as media_confianca,
+        COUNT(*) as total_respostas
+      FROM feedbacks
+    `);
+
+    const [medoStats] = await pool.query(`
+      SELECT 
+        medo_selecionado, 
+        COUNT(*) as qtd 
+      FROM feedbacks 
+      GROUP BY medo_selecionado
+    `);
+
+    const totalFeedbacks = feedbackStats[0].total_respostas || 1;
+    const medosPorcentagem = medoStats.map(row => ({
+      medo: row.medo_selecionado,
+      porcentagem: ((row.qtd / totalFeedbacks) * 100).toFixed(1) + '%'
+    }));
+
     const totalVisits = metrics.total_visits || 1;
     const conversionRate = ((leadsCaptured / totalVisits) * 100).toFixed(2);
     const successCriteria = 15.0;
@@ -51,6 +104,10 @@ app.get('/api/metrics/report', async (req, res) => {
 
     res.json({
       raw_data: { ...metrics, leads_captured: leadsCaptured },
+      feedback_analysis: {
+        media_confianca: Number(feedbackStats[0].media_confianca || 0).toFixed(1),
+        medos_distribuicao: medosPorcentagem
+      },
       analysis: {
         conversion_rate: `${conversionRate}%`,
         success_criteria_met: isSuccess,
@@ -115,6 +172,10 @@ app.post('/api/feedback', async (req, res) => {
   const { leadId, confianca, medo } = req.body;
   try {
     await pool.query(
+      'INSERT INTO feedbacks (lead_id, confianca_nota, medo_selecionado) VALUES (?, ?, ?)',
+      [leadId, confianca, medo]
+    );
+    await pool.query(
       'UPDATE leads SET interesse_nivel = ?, medo_principal = CONCAT(medo_principal, " | Medo: ", ?) WHERE id = ?',
       [confianca, medo, leadId]
     );
@@ -125,8 +186,6 @@ app.post('/api/feedback', async (req, res) => {
   }
 });
 
-// Rota "Coringa" para o React Router (SPA)
-// Qualquer rota não-API retorna o index.html do React
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });

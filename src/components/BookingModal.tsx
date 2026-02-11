@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Calendar, Clock, X, CheckCircle, ShieldCheck, MessageSquare } from 'lucide-react';
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: (oficina: string) => void;
+  onReset: () => void;
   servico: any;
   oficina: any;
   placa: string;
@@ -17,7 +19,7 @@ const MEDO_OPTIONS = [
   "Orçamento abusivo por falta de transparência"
 ];
 
-export function BookingModal({ isOpen, onClose, servico, oficina, placa }: BookingModalProps) {
+export function BookingModal({ isOpen, onClose, onSuccess, onReset, servico, oficina, placa }: BookingModalProps) {
   const [step, setStep] = useState(1); // 1: Data/Hora, 2: Contato, 3: Quiz, 4: Sucesso
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
@@ -28,6 +30,20 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
   // Estados do Quiz
   const [quizConfianca, setQuizConfianca] = useState<number>(5);
   const [quizMedo, setQuizMedo] = useState('');
+
+  // Reseta o estado sempre que o modal for aberto
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setSelectedDate('');
+      setSelectedTime('');
+      setContato('');
+      setLeadId(null);
+      setQuizConfianca(5);
+      setQuizMedo('');
+      setLoading(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen || !servico || !oficina) return null;
 
@@ -58,6 +74,7 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
 
       if (response.ok) {
         setLeadId(data.leadId);
+        onSuccess(oficina.nome); // Salva no localStorage
         setStep(3); // Vai para o Quiz
       } else {
         alert('Erro ao agendar. Tente novamente.');
@@ -145,6 +162,7 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
                     type="date" 
                     min={getFutureDate(1)}
                     onChange={(e) => setSelectedDate(e.target.value)}
+                    value={selectedDate}
                     className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   />
                 </div>
@@ -152,6 +170,7 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
                   <label className="block text-sm font-medium text-gray-700 mb-1">Horário de Entrada</label>
                   <select 
                     onChange={(e) => setSelectedTime(e.target.value)}
+                    value={selectedTime}
                     className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   >
                     <option value="">Selecione...</option>
@@ -293,7 +312,7 @@ export function BookingModal({ isOpen, onClose, servico, oficina, placa }: Booki
                 <br/><br/>
                 Sua pré-reserva foi registrada. Nossa equipe entrará em contato em breve pelo e-mail <strong>{contato}</strong> para confirmar a disponibilidade da peça.
               </p>
-              <button onClick={onClose} className="w-full bg-gray-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors">
+              <button onClick={onReset} className="w-full bg-gray-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors">
                 Voltar ao Início
               </button>
             </div>

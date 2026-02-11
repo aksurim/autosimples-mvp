@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock, Download } from 'lucide-react';
+import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock, Download, PieChart, Trash2, AlertTriangle } from 'lucide-react';
 
 export function AdminDashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const fetchMetrics = async () => {
     try {
@@ -22,32 +23,57 @@ export function AdminDashboard() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchMetrics();
-      const interval = setInterval(fetchMetrics, 5000); // Atualiza a cada 5s
+      const interval = setInterval(fetchMetrics, 5000);
       return () => clearInterval(interval);
     }
   }, [isAuthenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === '231010') { // Senha do MVP
+    if (password === '231010') {
       setIsAuthenticated(true);
     } else {
       alert('Senha incorreta');
     }
   };
 
+  const handleResetDatabase = async () => {
+    if (confirm('ATENÇÃO: Isso apagará TODOS os dados (Leads, Métricas, Feedbacks). Tem certeza absoluta?')) {
+      try {
+        const response = await fetch('http://localhost:3001/api/admin/reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: '231010' }) // Envia senha para confirmar no backend
+        });
+        
+        if (response.ok) {
+          alert('Base de dados zerada com sucesso!');
+          fetchMetrics(); // Atualiza a tela
+          setShowResetModal(false);
+        } else {
+          alert('Erro ao resetar.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Erro de conexão.');
+      }
+    }
+  };
+
   const downloadCSV = () => {
     if (!data) return;
     
-    // Dados Calculados para o Relatório
     const totalVisits = data.raw_data.total_visits || 1;
     const plateClicks = data.raw_data.plate_input_clicks || 0;
     const leads = data.raw_data.leads_captured || 0;
-    
     const interesseRate = ((plateClicks / totalVisits) * 100).toFixed(1);
     const conversaoRate = data.analysis.conversion_rate;
+    const mediaConfianca = data.feedback_analysis?.media_confianca || 'N/A';
 
-    // Cria o conteúdo do CSV Otimizado para o Entregável
+    const medosTexto = data.feedback_analysis?.medos_distribuicao
+      .map((m: any) => `${m.medo} (${m.porcentagem})`)
+      .join(' | ');
+
     const csvRows = [
       ["RELATÓRIO DE VALIDAÇÃO - AUTOSIMPLES (MVP SANTANDER EXPLORER)"],
       ["Data de Extração", new Date().toLocaleString()],
@@ -60,22 +86,24 @@ export function AdminDashboard() {
       ["Leads Capturados", leads, "Pré-reservas (Validação de Negócio)"],
       ["Taxa de Conversão", conversaoRate, leads >= (totalVisits * 0.15) ? "META BATIDA (>15%)" : "Abaixo da Meta"],
       [],
-      ["--- 2. RESPOSTAS PARA O ENTREGÁVEL ---"],
+      ["--- 2. FEEDBACK QUALITATIVO (QUIZ) ---"],
+      ["Média de Confiança (0-10)", mediaConfianca, "Validação da Hipótese de Solução"],
+      ["Distribuição de Medos", medosTexto || "Sem dados", "Validação da Hipótese de Problema"],
+      [],
+      ["--- 3. RESPOSTAS PARA O ENTREGÁVEL ---"],
       ["Campo da Planilha", "Dado/Texto Sugerido"],
-      ["Hipótese da Solução", `Validada. ${interesseRate}% dos visitantes interagiram com o input de placa.`],
-      ["Evidência Quantitativa", `Taxa de Conversão de ${conversaoRate}% com ${leads} leads qualificados.`],
-      ["Resultado Esperado", `Validação de interesse transacional com base de ${leads} usuários.`],
-      ["Métricas de Validação", "Leads capturados, Taxa de cliques na placa e Conversão do funil."]
+      ["Hipótese do Problema", `Confirmada. O maior medo relatado foi: ${data.feedback_analysis?.medos_distribuicao[0]?.medo || 'N/A'}`],
+      ["Hipótese da Solução", `Validada. Confiança média de ${mediaConfianca}/10 na tecnologia.`],
+      ["Evidência Quantitativa", `Taxa de Conversão de ${conversaoRate}% com ${leads} leads qualificados.`]
     ];
 
-    // Adiciona o BOM (\uFEFF) para forçar o Excel a reconhecer UTF-8 (Acentos)
     const csvContent = "data:text/csv;charset=utf-8,\uFEFF" 
       + csvRows.map(e => e.join(";")).join("\n");
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "autosimples_relatorio_santander.csv");
+    link.setAttribute("download", "autosimples_relatorio_completo.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -108,7 +136,7 @@ export function AdminDashboard() {
   if (loading) return <div className="p-8 text-center">Carregando métricas...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8 pb-24">
       <div className="max-w-6xl mx-auto">
         <header className="mb-8 flex justify-between items-center">
           <div>
@@ -123,7 +151,7 @@ export function AdminDashboard() {
               onClick={downloadCSV}
               className="bg-gray-900 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors shadow-md"
             >
-              <Download className="w-4 h-4" /> Baixar Relatório Santander
+              <Download className="w-4 h-4" /> Baixar Relatório
             </button>
           </div>
         </header>
@@ -141,20 +169,40 @@ export function AdminDashboard() {
             icon={<MousePointer className="text-purple-600" />} 
           />
           <MetricCard 
-            title="Simulações Feitas" 
-            value={data.raw_data.simulation_success} 
-            icon={<CheckCircle className="text-green-600" />} 
-          />
-          <MetricCard 
             title="Leads Capturados" 
             value={data.raw_data.leads_captured} 
             icon={<TrendingUp className="text-orange-600" />} 
             highlight
           />
+          <MetricCard 
+            title="Média Confiança" 
+            value={data.feedback_analysis?.media_confianca || '-'} 
+            icon={<CheckCircle className="text-green-600" />} 
+          />
         </div>
 
-        {/* JSON Raw Data para Print */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        {/* Seção de Feedback Qualitativo */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+          <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <PieChart className="w-5 h-5" />
+            Distribuição de Medos (Hipótese do Problema)
+          </h3>
+          <div className="space-y-3">
+            {data.feedback_analysis?.medos_distribuicao?.length > 0 ? (
+              data.feedback_analysis.medos_distribuicao.map((item: any, index: number) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <span className="text-sm font-medium text-gray-700">{item.medo}</span>
+                  <span className="text-sm font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded">{item.porcentagem}</span>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">Nenhum feedback coletado ainda.</p>
+            )}
+          </div>
+        </div>
+
+        {/* JSON Raw Data */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-12">
           <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
             Log de Eventos (JSON)
@@ -162,10 +210,59 @@ export function AdminDashboard() {
           <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto font-mono text-sm">
             {JSON.stringify(data, null, 2)}
           </pre>
-          <p className="text-xs text-gray-500 mt-2">
-            *Use este JSON como evidência no seu relatório do Santander Explorer.
-          </p>
         </div>
+
+        {/* Zona de Perigo (Reset) */}
+        <div className="border-t border-gray-200 pt-8 mt-12">
+          <div className="flex justify-between items-center bg-red-50 p-6 rounded-xl border border-red-100">
+            <div>
+              <h3 className="text-red-800 font-bold text-lg flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5" />
+                Zona de Perigo
+              </h3>
+              <p className="text-red-600 text-sm mt-1">
+                Ações irreversíveis para gestão do ambiente de produção.
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowResetModal(true)}
+              className="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors flex items-center gap-2 shadow-lg shadow-red-200"
+            >
+              <Trash2 className="w-4 h-4" />
+              ZERAR BASE DE DADOS
+            </button>
+          </div>
+        </div>
+
+        {/* Modal de Confirmação de Reset */}
+        {showResetModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl p-8 max-w-md w-full text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle className="w-8 h-8 text-red-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Tem certeza absoluta?</h3>
+              <p className="text-gray-600 mb-6">
+                Isso apagará <strong>TODOS</strong> os leads, feedbacks e métricas coletadas até agora. Essa ação não pode ser desfeita.
+              </p>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setShowResetModal(false)}
+                  className="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  onClick={handleResetDatabase}
+                  className="flex-1 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700"
+                >
+                  SIM, APAGAR TUDO
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
