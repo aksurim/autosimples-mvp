@@ -154,13 +154,7 @@ export function Hero() {
             {step === 1 && (
               <div className="bg-white p-8 rounded-3xl shadow-2xl shadow-brand-teal/10 border border-gray-100 animate-fade-in relative">
                 
-                {/* Seta Indicativa (SVG) */}
-                <div className="absolute -top-12 -left-12 hidden md:block transform rotate-12">
-                  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 10 C 40 10, 60 40, 80 80" stroke="#DAF043" strokeWidth="4" strokeLinecap="round" strokeDasharray="10 10"/>
-                    <path d="M80 80 L 60 75 M 80 80 L 75 60" stroke="#DAF043" strokeWidth="4" strokeLinecap="round"/>
-                  </svg>
-                </div>
+                {/* Seta Removida */}
 
                 <h3 className="text-2xl font-bold text-brand-dark mb-2 text-center">O que seu carro precisa hoje?</h3>
                 <p className="text-center text-gray-500 mb-8 text-sm">Selecione o serviço desejado abaixo 👇</p>
