@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, Wrench, PlayCircle, Lock } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { Logo } from './Logo';
@@ -38,16 +38,11 @@ export function Header() {
     <>
       {/* Desktop Header */}
       <header className="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100 hidden md:block">
-        <div className="w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8"> {/* Aumentei a largura para 95% */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-28">
             <div onClick={() => scrollToSection('home')} className="cursor-pointer hover:opacity-90 transition-opacity">
               {/* Logo Forçada para 300px (Desktop) */}
-              <img 
-                src="/logo_autosimples.png" 
-                alt="AutoSimples" 
-                style={{ height: '300px', width: 'auto' }} 
-                className="object-contain"
-              />
+              <Logo className="h-[300px]" />
             </div>
 
             <nav className="flex space-x-8 items-center">
@@ -71,12 +66,7 @@ export function Header() {
       <header className="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100 md:hidden flex justify-center items-center h-20">
         <div onClick={() => scrollToSection('home')}>
           {/* Logo Forçada para 300px (Mobile - Conforme validado pelo usuário) */}
-          <img 
-            src="/logo_autosimples.png" 
-            alt="AutoSimples" 
-            style={{ height: '300px', width: 'auto', maxHeight: '300px' }} 
-            className="object-contain"
-          />
+          <Logo className="h-[300px] max-h-[300px]" />
         </div>
       </header>
 

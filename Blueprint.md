@@ -33,6 +33,7 @@ O **AutoSimples** é um ecossistema AutoTech que utiliza a tecnologia **"Plate-t
 ### 3.2. Backend (API & Lógica)
 *   **Runtime**: Node.js (Express).
 *   **Arquitetura**: API RESTful com rotas para simulação, agendamento e métricas.
+*   **Configuração de Ambiente**: Detecção automática de ambiente (`localhost` vs Produção) via `src/config/api.ts`.
 *   **Segurança**: CORS configurado, validação de inputs e proteção de rotas admin.
 
 ### 3.3. Banco de Dados (Persistência)
@@ -47,6 +48,7 @@ O **AutoSimples** é um ecossistema AutoTech que utiliza a tecnologia **"Plate-t
 *   **Provedor**: SuperDominios (cPanel / Node.js App).
 *   **Ambiente**: Produção (Live).
 *   **Build**: Otimizado via Vite (`npm run build`).
+*   **Variáveis de Ambiente**: Gerenciadas via painel do Node.js App no cPanel.
 
 ## 4. Estratégia de Coleta de Dados (KPIs)
 

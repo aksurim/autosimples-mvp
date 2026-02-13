@@ -66,6 +66,19 @@ O projeto foi construído com foco em **performance**, **escalabilidade** e **ra
 
 ---
 
+## ☁️ Deploy em Produção (cPanel/Node.js)
+
+O projeto está configurado para rodar em ambientes cPanel com CloudLinux Passenger.
+
+1.  **Build**: Gere a versão de produção com `npm run build`.
+2.  **Upload**: Suba a pasta `dist` e a pasta `server` para a raiz do app no servidor.
+3.  **Configuração**:
+    *   Defina as variáveis de ambiente (`DB_HOST`, `DB_USER`, etc.) no painel do Node.js App.
+    *   Aponte o arquivo de inicialização para `server/index.js`.
+4.  **Banco de Dados**: Importe a estrutura SQL via phpMyAdmin.
+
+---
+
 ## 📂 Estrutura de Pastas
 *   `/src`: Código fonte do Frontend (React).
 *   `/server`: Código fonte do Backend (API Node.js).

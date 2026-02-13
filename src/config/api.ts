@@ -1,9 +1,9 @@
 // Configuração centralizada da API
 
-// Em produção (Deploy), a API estará no mesmo domínio (/api)
-// Em desenvolvimento local, usamos localhost:3001
-const isProduction = import.meta.env.PROD;
+// Detecta se está rodando em localhost (desenvolvimento) ou em domínio real (produção)
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-export const API_URL = isProduction 
-  ? '/api' 
-  : 'http://localhost:3001/api';
+// Se for localhost, usa a porta 3001. Se for produção, usa o caminho relativo /api
+export const API_URL = isLocalhost 
+  ? 'http://localhost:3001/api' 
+  : '/api';

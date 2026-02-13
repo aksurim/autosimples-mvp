@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckCircle2, MapPin, Star, ArrowRight, ShieldCheck } from 'lucide-react';
 import { OFICINAS_MOCK } from '../data/mockData';
 
@@ -46,19 +45,19 @@ export function SimulationResults({ placa, servico, onAgendar, onVoltar }: Simul
             return (
               <div 
                 key={oficina.id} 
-                className="border border-gray-200 rounded-xl p-4 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer group bg-white"
+                className="border border-gray-200 rounded-xl p-4 hover:border-brand-teal hover:shadow-md transition-all cursor-pointer group bg-white"
                 onClick={() => onAgendar(oficina)}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h4 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{oficina.nome}</h4>
+                    <h4 className="font-bold text-gray-900 group-hover:text-brand-teal transition-colors">{oficina.nome}</h4>
                     <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
                       <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {oficina.distancia}</span>
                       <span className="flex items-center gap-1 text-yellow-600"><Star className="w-3 h-3 fill-current" /> {oficina.nota}</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="block text-lg font-bold text-blue-700">
+                    <span className="block text-lg font-bold text-brand-teal">
                       R$ {precoFinal.toFixed(2).replace('.', ',')}
                     </span>
                     <span className="text-[10px] text-gray-400">Peça + Mão de Obra</span>
@@ -69,7 +68,7 @@ export function SimulationResults({ placa, servico, onAgendar, onVoltar }: Simul
                   <div className="flex items-center gap-1 text-xs text-green-600 font-medium">
                     <ShieldCheck className="w-3 h-3" /> Garantia AutoSimples
                   </div>
-                  <button className="text-sm font-bold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                  <button className="text-sm font-bold text-brand-teal flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                     Agendar <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

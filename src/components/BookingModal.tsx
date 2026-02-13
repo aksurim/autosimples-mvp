@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar, X, CheckCircle, ShieldCheck, MessageSquare } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -58,7 +59,7 @@ export function BookingModal({ isOpen, onClose, onSuccess, onReset, servico, ofi
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/agendar', {
+      const response = await fetch(`${API_URL}/agendar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -95,7 +96,7 @@ export function BookingModal({ isOpen, onClose, onSuccess, onReset, servico, ofi
 
     setLoading(true);
     try {
-      await fetch('http://localhost:3001/api/feedback', {
+      await fetch(`${API_URL}/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Info } from 'lucide-react';
 
 interface ToastProps {
@@ -20,8 +20,8 @@ export function Toast({ message, isVisible, onClose }: ToastProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 z-[60] animate-fade-in-up">
-      <Info className="w-5 h-5 text-blue-400" />
+    <div className="fixed bottom-24 md:bottom-8 left-1/2 transform -translate-x-1/2 bg-brand-dark text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 z-[60] animate-fade-in-up">
+      <Info className="w-5 h-5 text-brand-teal" />
       <span className="text-sm font-medium">{message}</span>
     </div>
   );

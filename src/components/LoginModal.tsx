@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import { X, ArrowRight, AlertCircle } from 'lucide-react';
 import { Logo } from './Logo';
 
 interface LoginModalProps {
@@ -33,7 +33,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
           </button>
           
           <div className="flex justify-center mb-2 scale-90">
-            <Logo className="h-10 w-10" textClassName="text-xl" />
+            <Logo className="h-10" />
           </div>
           <h3 className="font-bold text-lg text-brand-dark">Área do Parceiro</h3>
         </div>

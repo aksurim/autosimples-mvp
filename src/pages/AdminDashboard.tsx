@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock, Download, PieChart, Trash2, AlertTriangle } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 export function AdminDashboard() {
   const [data, setData] = useState<any>(null);
@@ -10,7 +11,7 @@ export function AdminDashboard() {
 
   const fetchMetrics = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/metrics/report');
+      const response = await fetch(`${API_URL}/metrics/report`);
       const json = await response.json();
       setData(json);
     } catch (error) {
@@ -40,15 +41,15 @@ export function AdminDashboard() {
   const handleResetDatabase = async () => {
     if (confirm('ATENÇÃO: Isso apagará TODOS os dados (Leads, Métricas, Feedbacks). Tem certeza absoluta?')) {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/reset', {
+        const response = await fetch(`${API_URL}/admin/reset`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: '231010' }) // Envia senha para confirmar no backend
+          body: JSON.stringify({ password: '231010' })
         });
         
         if (response.ok) {
           alert('Base de dados zerada com sucesso!');
-          fetchMetrics(); // Atualiza a tela
+          fetchMetrics();
           setShowResetModal(false);
         } else {
           alert('Erro ao resetar.');

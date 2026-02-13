@@ -1,6 +1,3 @@
-import React from 'react';
-import { Play } from 'lucide-react';
-
 export function VideoSection() {
   return (
     <section id="video" className="py-20 bg-brand-dark relative overflow-hidden">
@@ -25,7 +22,7 @@ export function VideoSection() {
             <video 
               className="absolute top-0 left-0 w-full h-full object-cover"
               controls
-              poster="/video_cover.png" // Nome sugerido para a nova capa
+              poster="/video_cover.png"
             >
               <source src="/AutoSimples.mp4" type="video/mp4" />
               Seu navegador não suporta o elemento de vídeo.
