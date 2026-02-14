@@ -39,3 +39,14 @@
 - [x] Configurar Banco de Dados em Produção
 - [x] Realizar Deploy da Aplicação
 - [x] Validar Links e Fluxos em Produção (Sucesso!)
+
+## Fase 5: Refinamento Pós-Deploy
+- [x] Alterar Captura de Lead: Substituir E-mail por Telefone (WhatsApp)
+- [x] Ajustar Banco de Dados: Migrar coluna email para telefone
+- [x] Painel Admin: Implementar Exportação de Lista de Telefones (CSV)
+- [x] UX/UI: Ajustar alinhamento de textos (Centralizado no Mobile)
+
+## Fase 6: Documentação e Polimento (Sprint Atual)
+- [x] README.md: Adicionar Badges de Tecnologias (Shields.io)
+- [x] README.md: Adicionar Emojis nos títulos de seção
+- [ ] Commit e Push das alterações

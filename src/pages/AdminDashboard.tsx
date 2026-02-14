@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock, Download, PieChart, Trash2, AlertTriangle } from 'lucide-react';
+import { BarChart3, Users, MousePointer, CheckCircle, TrendingUp, Lock, Download, PieChart, Trash2, AlertTriangle, Phone } from 'lucide-react';
 import { API_URL } from '../config/api';
 
 export function AdminDashboard() {
@@ -109,6 +109,10 @@ export function AdminDashboard() {
     link.click();
   };
 
+  const downloadPhonesCSV = () => {
+    window.open(`${API_URL}/admin/export-phones?password=231010`, '_blank');
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -139,15 +143,21 @@ export function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 p-8 pb-24">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-8 flex justify-between items-center">
-          <div>
+        <header className="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-center md:text-left">
             <h1 className="text-3xl font-bold text-gray-900">Dashboard de Validação</h1>
             <p className="text-gray-500">Dados em tempo real do experimento AutoSimples</p>
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-wrap justify-center gap-4 items-center">
             <span className={`px-4 py-2 rounded-full text-sm font-bold ${data.analysis.success_criteria_met ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
               Meta: {data.analysis.conversion_rate} (Alvo: 15%)
             </span>
+            <button 
+              onClick={downloadPhonesCSV}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition-colors shadow-md"
+            >
+              <Phone className="w-4 h-4" /> Exportar Telefones
+            </button>
             <button 
               onClick={downloadCSV}
               className="bg-gray-900 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors shadow-md"

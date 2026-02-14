@@ -1,5 +1,21 @@
 # Change Log - AutoSimples
 
+## [Versão 1.1.1] - Documentação e Polimento
+- **Documentação (README.md)**:
+    - **Melhoria Visual**: Adicionados Badges (Shields.io) com estilo `for-the-badge` para destacar a stack tecnológica (React, Vite, TypeScript, Tailwind, Node.js, Express, MySQL).
+    - **Organização**: Inclusão de emojis nos títulos de seção para melhor legibilidade e apelo visual.
+
+## [Versão 1.1.0] - Sprint de Refinamento
+- **Captura de Lead**:
+    - **Mudança**: Substituído o campo "E-mail" por "Telefone/WhatsApp" no modal de agendamento.
+    - **Motivo**: Aumentar a taxa de contato efetivo com leads frios/mornos.
+    - **Backend**: Adicionada coluna `telefone` na tabela `leads` e tornado `email` opcional.
+- **Painel Admin**:
+    - **Funcionalidade**: Adicionado botão para exportar CSV de telefones capturados.
+    - **Objetivo**: Facilitar a criação de listas para campanhas de marketing/vendas.
+- **UX/UI**:
+    - **Ajuste**: Centralização de textos na Hero Section apenas para dispositivos móveis (`text-center md:text-left`).
+
 ## [Versão Estável 1.0.2] - Data Atual (Final)
 - **Correção Crítica de Produção (Hotfix Final)**:
     - **Bug**: O `BookingModal` e o `AdminDashboard` estavam falhando em produção com erro de conexão.

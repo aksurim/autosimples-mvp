@@ -52,6 +52,34 @@ app.post('/api/admin/reset', async (req, res) => {
   }
 });
 
+// Exportar Telefones (CSV)
+app.get('/api/admin/export-phones', async (req, res) => {
+  const { password } = req.query;
+
+  if (password !== '231010') {
+    return res.status(401).json({ error: 'Senha incorreta' });
+  }
+
+  try {
+    const [rows] = await pool.query('SELECT telefone, created_at FROM leads WHERE telefone IS NOT NULL');
+    
+    // Formato CSV simples: Telefone, Data
+    let csvContent = "Telefone;Data Cadastro\n";
+    rows.forEach(row => {
+      const data = new Date(row.created_at).toLocaleString('pt-BR');
+      csvContent += `${row.telefone};${data}\n`;
+    });
+
+    res.header('Content-Type', 'text/csv');
+    res.attachment('telefones_leads.csv');
+    return res.send(csvContent);
+
+  } catch (error) {
+    console.error('Erro ao exportar telefones:', error);
+    res.status(500).json({ error: 'Erro ao exportar dados' });
+  }
+});
+
 // --- ROTAS DE MÉTRICAS ---
 
 app.post('/api/metrics/increment', async (req, res) => {
@@ -155,10 +183,11 @@ app.post('/api/simular', async (req, res) => {
 
 app.post('/api/agendar', async (req, res) => {
   const { placa, servico_id, oficina, data_hora, contato } = req.body;
+  // contato agora é telefone
   try {
     await pool.query('UPDATE metrics SET count = count + 1 WHERE metric_name = ?', ['schedule_button_clicks']);
     const [result] = await pool.query(
-      'INSERT INTO leads (placa, email, quer_ser_beta, interesse_nivel, medo_principal) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO leads (placa, telefone, quer_ser_beta, interesse_nivel, medo_principal) VALUES (?, ?, ?, ?, ?)',
       [placa, contato, true, null, `Agendamento: ${oficina} - ${data_hora}`]
     );
     res.json({ status: 'success', message: 'Pré-agendamento realizado!', leadId: result.insertId });

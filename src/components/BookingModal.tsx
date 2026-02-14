@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, X, CheckCircle, ShieldCheck, MessageSquare } from 'lucide-react';
+import { Calendar, X, CheckCircle, ShieldCheck, MessageSquare, Phone } from 'lucide-react';
 import { API_URL } from '../config/api';
 
 interface BookingModalProps {
@@ -67,7 +67,7 @@ export function BookingModal({ isOpen, onClose, onSuccess, onReset, servico, ofi
           servico_id: servico.id,
           oficina: oficina.nome,
           data_hora: `${selectedDate} ${selectedTime}`,
-          contato
+          contato // Agora envia o telefone
         })
       });
 
@@ -195,22 +195,28 @@ export function BookingModal({ isOpen, onClose, onSuccess, onReset, servico, ofi
             </>
           )}
 
-          {/* Passo 2: Contato Final */}
+          {/* Passo 2: Contato Final (TELEFONE) */}
           {step === 2 && (
             <>
               <h4 className="text-gray-800 font-bold mb-2">Onde enviamos a confirmação?</h4>
               <p className="text-sm text-gray-500 mb-6">Você receberá o voucher da peça e o endereço exato da oficina.</p>
               
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Seu melhor e-mail</label>
-                <input 
-                  type="email" 
-                  placeholder="exemplo@email.com"
-                  value={contato}
-                  onChange={(e) => setContato(e.target.value)}
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                  autoFocus
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Seu WhatsApp ou Telefone</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Phone className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input 
+                    type="tel" 
+                    placeholder="(11) 99999-9999"
+                    value={contato}
+                    onChange={(e) => setContato(e.target.value)}
+                    className="w-full pl-10 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                    autoFocus
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Não se preocupe, não enviamos spam.</p>
               </div>
 
               <button 
@@ -311,7 +317,7 @@ export function BookingModal({ isOpen, onClose, onSuccess, onReset, servico, ofi
               <p className="text-gray-600 mb-6">
                 Você é um dos nossos <strong>Beta Testers</strong> exclusivos!
                 <br/><br/>
-                Sua pré-reserva foi registrada. Nossa equipe entrará em contato em breve pelo e-mail <strong>{contato}</strong> para confirmar a disponibilidade da peça.
+                Sua pré-reserva foi registrada. Nossa equipe entrará em contato em breve pelo número <strong>{contato}</strong> para confirmar a disponibilidade da peça.
               </p>
               <button onClick={onReset} className="w-full bg-gray-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors">
                 Voltar ao Início

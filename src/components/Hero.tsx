@@ -121,8 +121,8 @@ export function Hero() {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           
           {/* Coluna da Esquerda: Copy */}
-          <div className="text-left animate-fade-in-up">
-            <div className="inline-block px-4 py-1 bg-brand-lime/20 text-brand-dark text-xs font-bold rounded-full mb-6 border border-brand-lime/50">
+          <div className="animate-fade-in-up flex flex-col items-center md:items-start text-center md:text-left">
+            <div className="self-start px-4 py-1 bg-brand-lime/20 text-brand-dark text-xs font-bold rounded-full mb-6 border border-brand-lime/50">
               ⚡ TUDO EM 3 CLICKS
             </div>
             
